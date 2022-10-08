@@ -1,77 +1,57 @@
-import 'package:chatapp_firebase/pages/LoginPage.dart';
 import 'package:chatapp_firebase/pages/home_page.dart';
+import 'package:chatapp_firebase/pages/login/ragisterpage.dart';
+import 'package:chatapp_firebase/service/auth_service.dart';
+import 'package:chatapp_firebase/service/database_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../helper/helper_fuction.dart';
-import '../service/auth_service.dart';
-import '../widgets/textinputdecoration.dart';
+import '../../helper/helper_fuction.dart';
+import '../../widgets/textinputdecoration.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class Loginpage extends StatefulWidget {
+  const Loginpage({Key? key}) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<Loginpage> createState() => _LoginpageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  bool _isLoading = false;
-  final formKey = GlobalKey<FormState>();
+class _LoginpageState extends State<Loginpage> {
+  final formkey = GlobalKey<FormState>();
   String email = "";
   String password = "";
-  String fullName = "";
+  bool _isLoading = false;
   AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor))
-          : SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
-                child: Form(
-                    key: formKey,
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor))
+            : SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+                  child: Form(
+                    key: formkey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        const Text(
+                      children: [
+                        Text(
                           "Groupie",
                           style: TextStyle(
                               fontSize: 40, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 10),
-                        const Text(
-                            "Create your account now to chat and explore",
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text("Login now to see what they are talking!",
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w400)),
-                        Image.asset("assets/register.png"),
-                        TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              labelText: "Full Name",
-                              prefixIcon: Icon(
-                                Icons.person,
-                                color: Theme.of(context).primaryColor,
-                              )),
-                          onChanged: (val) {
-                            setState(() {
-                              fullName = val;
-                            });
-                          },
-                          validator: (val) {
-                            if (val!.isNotEmpty) {
-                              return null;
-                            } else {
-                              return "Name cannot be empty";
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
+                        Image.asset("assets/login.png"),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
                               labelText: "Email",
@@ -84,8 +64,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               email = val;
                             });
                           },
-
-                          // check tha validation
                           validator: (val) {
                             return RegExp(
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -94,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 : "Please enter a valid email";
                           },
                         ),
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         TextFormField(
                           obscureText: true,
                           decoration: textInputDecoration.copyWith(
@@ -128,12 +106,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30))),
                             child: const Text(
-                              "Register",
+                              "Sign In",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16),
                             ),
                             onPressed: () {
-                              register();
+                              login();
                             },
                           ),
                         ),
@@ -141,41 +119,44 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 10,
                         ),
                         Text.rich(TextSpan(
-                          text: "Already have an account? ",
+                          text: "Don't have an account? ",
                           style: const TextStyle(
                               color: Colors.black, fontSize: 14),
                           children: <TextSpan>[
                             TextSpan(
-                                text: "Login now",
+                                text: "Register here",
                                 style: const TextStyle(
                                     color: Colors.black,
                                     decoration: TextDecoration.underline),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    nextScreen(context, const Loginpage());
+                                    nextScreen(context, RegisterPage());
                                   }),
                           ],
                         )),
                       ],
-                    )),
-              ),
-            ),
-    );
+                    ),
+                  ),
+                ),
+              ));
   }
 
-  register() async {
-    if (formKey.currentState!.validate()) {
+  login() async {
+    if (formkey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
       await authService
-          .registerUserWithEmailandPassword(fullName, email, password)
+          .loginWithUserNameandPassword(email, password)
           .then((value) async {
         if (value == true) {
-          // saving the shared preference state
+          QuerySnapshot snapshot =
+              await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                  .gettingUserData(email);
+          // saving the values to our shared preferences
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
-          await HelperFunctions.saveUserNameSF(fullName);
+          await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
           nextScreenReplace(context, const HomeScreen());
         } else {
           showSnackbar(context, Colors.red, value);

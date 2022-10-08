@@ -1,5 +1,5 @@
 import 'package:chatapp_firebase/helper/helper_fuction.dart';
-import 'package:chatapp_firebase/pages/LoginPage.dart';
+import 'package:chatapp_firebase/pages/login/LoginPage.dart';
 import 'package:chatapp_firebase/pages/profile_Page.dart';
 import 'package:chatapp_firebase/pages/serach_page.dart';
 import 'package:chatapp_firebase/widgets/textinputdecoration.dart';

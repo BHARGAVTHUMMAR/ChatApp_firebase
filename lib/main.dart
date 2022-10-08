@@ -1,6 +1,6 @@
 import 'package:chatapp_firebase/constant.dart';
 import 'package:chatapp_firebase/helper/helper_fuction.dart';
-import 'package:chatapp_firebase/pages/LoginPage.dart';
+import 'package:chatapp_firebase/pages/login/LoginPage.dart';
 import 'package:chatapp_firebase/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:chatapp_firebase/constant.dart';
+import 'package:chatapp_firebase/constant/constant.dart';
 import 'package:chatapp_firebase/helper/helper_fuction.dart';
 import 'package:chatapp_firebase/pages/login/LoginPage.dart';
 import 'package:chatapp_firebase/pages/home_page.dart';

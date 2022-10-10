@@ -1,5 +1,5 @@
 import 'package:chatapp_firebase/constant/constant.dart';
-import 'package:chatapp_firebase/helper/helper_fuction.dart';
+import 'package:chatapp_firebase/helper/helper_function.dart';
 import 'package:chatapp_firebase/pages/login/LoginPage.dart';
 import 'package:chatapp_firebase/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,10 +11,10 @@ void main() async {
   if (kIsWeb) {
     await Firebase.initializeApp(
         options: FirebaseOptions(
-            apiKey: Constants.apikey,
+            apiKey: Constants.apiKey,
             appId: Constants.appId,
-            messagingSenderId: Constants.messagingsenderid,
-            projectId: Constants.projectid));
+            messagingSenderId: Constants.messagingSenderId,
+            projectId: Constants.projectId));
   } else {
     await Firebase.initializeApp();
   }

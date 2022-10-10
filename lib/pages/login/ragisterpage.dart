@@ -3,7 +3,7 @@ import 'package:chatapp_firebase/pages/home_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../helper/helper_fuction.dart';
+import '../../helper/helper_function.dart';
 import '../../service/auth_service.dart';
 import '../../widgets/textinputdecoration.dart';
 

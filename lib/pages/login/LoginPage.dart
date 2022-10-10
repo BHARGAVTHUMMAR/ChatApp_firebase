@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../helper/helper_fuction.dart';
+import '../../helper/helper_function.dart';
 import '../../widgets/textinputdecoration.dart';
 
 class Loginpage extends StatefulWidget {
